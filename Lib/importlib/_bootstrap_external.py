@@ -1075,8 +1075,17 @@ class ExtensionFileLoader(FileLoader, _LoaderBasics):
 
     """
 
-    def __init__(self, name, path):
-        self.name = name
+    def __init__(self, fullname=None, path=None, *, name=None):
+        if name is not None and fullname is not None:
+            raise TypeError('Either name or fullname needs to be used')
+
+        if name is not None:
+            _warnings.warn("the 'name' parameter is deprecated; use "
+                           "'fullname' instead", DeprecationWarning,
+                           stacklevel=2)
+            self.name = name
+        else:
+            self.name = fullname
         self.path = path
 
     def __eq__(self, other):
